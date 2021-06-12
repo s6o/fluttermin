@@ -7,9 +7,10 @@ CREATE TABLE fluttermin.users (
   user_id SERIAL PRIMARY KEY
 , email TEXT UNIQUE CHECK (email ~* '^.+@.+\..+$')
 , pass TEXT NOT NULL CHECK (length(pass) < 512)
-, role NAME NOT NULL DEFAULT 'fluttermin_user' CHECK (length(role) < 512)
 , first_name TEXT
 , last_name TEXT
+, api_role NAME NOT NULL DEFAULT 'fluttermin_user' CHECK (length(api_role) < 512)
+, app_role TEXT DEFAULT 'admin'
 );
 
 
@@ -18,9 +19,9 @@ fluttermin.check_role_exists() RETURNS TRIGGER
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_roles AS r WHERE r.rolname = new.role) THEN
+    IF NOT EXISTS (SELECT 1 FROM pg_roles AS r WHERE r.rolname = new.api_role) THEN
         RAISE foreign_key_violation USING message =
-            'unknown database role: ' || new.role;
+            'unknown database role: ' || new.api_role;
         RETURN NULL;
     END IF;
     RETURN NEW;
@@ -64,7 +65,7 @@ fluttermin.user_role(email TEXT, pass TEXT) RETURNS NAME
     AS $$
 BEGIN
     RETURN (
-        SELECT role FROM fluttermin.users
+        SELECT api_role FROM fluttermin.users
             WHERE users.email = user_role.email
                 AND users.pass = crypt(user_role.pass, users.pass)
     );
@@ -91,6 +92,7 @@ BEGIN
     FROM (
         SELECT
           _role AS role,
+          au.app_role,
           au.email,
           au.user_id,
           extract(epoch from now())::integer + 60*60 AS exp
@@ -121,8 +123,6 @@ GRANT fluttermin_user TO fluttermin_postgres;
 GRANT ALL ON SCHEMA public TO fluttermin_user;
 GRANT ALL ON ALL TABLES IN SCHEMA public TO fluttermin_user;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO fluttermin_user;
-GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO fluttermin_user;
-GRANT ALL ON ALL PROCEDURES IN SCHEMA public TO fluttermin_user;
 GRANT ALL ON ALL ROUTINES IN SCHEMA public TO fluttermin_user;
 
 
@@ -130,12 +130,10 @@ GRANT ALL ON ALL ROUTINES IN SCHEMA public TO fluttermin_user;
 
 REVOKE EXECUTE ON FUNCTION fluttermin_login(text, text) FROM fluttermin_anon;
 
-REVOKE ALL ON SCHEMA public FROM fluttermin_user;
-REVOKE ALL ON ALL TABLES IN SCHEMA public FROM fluttermin_user;
-REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM fluttermin_user;
-REVOKE ALL ON ALL FUNCTIONS IN SCHEMA public FROM fluttermin_user;
-REVOKE ALL ON ALL PROCEDURES IN SCHEMA public FROM fluttermin_user;
 REVOKE ALL ON ALL ROUTINES IN SCHEMA public FROM fluttermin_user;
+REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM fluttermin_user;
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM fluttermin_user;
+REVOKE ALL ON SCHEMA public FROM fluttermin_user;
 
 DROP ROLE fluttermin_user;
 DROP ROLE fluttermin_anon;
