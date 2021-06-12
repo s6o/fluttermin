@@ -1,0 +1,39 @@
+### Executable with VSCode REST Client extension
+
+### When testing routes which require Authorization header
+### execute /rpc/flutterminlogin first, then copy returned JWT token into
+### respective request
+
+
+### Auth, return token
+POST http://localhost:3000/rpc/fluttermin_login HTTP/1.1
+Content-Type: application/json
+Accept: application/vnd.pgrst.object+json
+
+{
+    "email": "john.doe@lost.net",
+    "pass": "johnny88"
+}
+
+### Auth, failure
+POST http://localhost:3000/rpc/fluttermin_login HTTP/1.1
+Content-Type: application/json
+Accept: application/vnd.pgrst.object+json
+
+{
+    "email": "unknown@lost.net",
+    "pass": "dummy"
+}
+
+### Check if default schema migrations table is readable
+### Expecting HTTP 401 Unauthorized
+GET http://localhost:3000/schema_migrations HTTP/1.1
+
+### Check if default schema migrations table is readable
+### Expecting HTTP 200 OK - with a JSON array of schema migrations
+GET http://localhost:3000/schema_migrations HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZmx1dHRlcm1pbl91c2VyIiwiZW1haWwiOiJqb2huLmRvZUBsb3N0Lm5ldCIsInVzZXJfaWQiOjEsImV4cCI6MTYyMzUxNDM4OH0.VGbRlo61sVIX4YVrcZivk_LOKuEnZF0713OzIsO-idk
+
+### List Fluttermin (app) users
+GET http://localhost:3000/fluttermin_users HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZmx1dHRlcm1pbl91c2VyIiwiZW1haWwiOiJqb2huLmRvZUBsb3N0Lm5ldCIsInVzZXJfaWQiOjEsImV4cCI6MTYyMzUxNDM4OH0.VGbRlo61sVIX4YVrcZivk_LOKuEnZF0713OzIsO-idk
