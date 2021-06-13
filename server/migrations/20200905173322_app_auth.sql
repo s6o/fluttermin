@@ -115,6 +115,9 @@ GRANT fluttermin_anon TO fluttermin_postgres;
 
 -- switch from public to your api schema if required
 REVOKE ALL ON SCHEMA public FROM fluttermin_anon;
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM fluttermin_anon;
+REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM fluttermin_anon;
+REVOKE ALL ON ALL FUNCTIONS IN SCHEMA public FROM fluttermin_anon;
 GRANT EXECUTE ON FUNCTION fluttermin_login(text, text) TO fluttermin_anon;
 
 -- api user expected to have a JWT token
@@ -123,21 +126,22 @@ GRANT fluttermin_user TO fluttermin_postgres;
 GRANT ALL ON SCHEMA public TO fluttermin_user;
 GRANT ALL ON ALL TABLES IN SCHEMA public TO fluttermin_user;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO fluttermin_user;
-GRANT ALL ON ALL ROUTINES IN SCHEMA public TO fluttermin_user;
+GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO fluttermin_user;
 
 
 -- migrate:down
 
 REVOKE EXECUTE ON FUNCTION fluttermin_login(text, text) FROM fluttermin_anon;
 
-REVOKE ALL ON ALL ROUTINES IN SCHEMA public FROM fluttermin_user;
+REVOKE ALL ON ALL FUNCTIONS IN SCHEMA public FROM fluttermin_user;
 REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM fluttermin_user;
 REVOKE ALL ON ALL TABLES IN SCHEMA public FROM fluttermin_user;
 REVOKE ALL ON SCHEMA public FROM fluttermin_user;
+REVOKE fluttermin_user FROM fluttermin_postgres;
 
 DROP ROLE fluttermin_user;
-DROP ROLE fluttermin_anon;
 DROP ROLE fluttermin_postgres;
+DROP ROLE fluttermin_anon;
 
 DROP FUNCTION fluttermin_login;
 
