@@ -1,49 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermin/app_route_path.dart';
-import 'package:fluttermin/models/app_model.dart';
-import 'package:fluttermin/pages/about_page.dart';
+import 'package:fluttermin/app_route.dart';
 import 'package:fluttermin/pages/app_users_page.dart';
 import 'package:fluttermin/pages/login_page.dart';
-import 'package:provider/provider.dart';
+import 'package:fluttermin/pages/not_found_page.dart';
 
-class AppRouterDelegate extends RouterDelegate<AppRoutePath>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoutePath> {
+class AppRouterDelegate extends RouterDelegate<AppRoute>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoute> {
   final GlobalKey<NavigatorState> navigatorKey;
+  final List<Page<dynamic>> _history = [];
 
   AppRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
-    AppModel model = Provider.of<AppModel>(context, listen: false);
     return Navigator(
       key: navigatorKey,
-      pages: model.isAuthorized
-          ? [
-              MaterialPage(child: AboutPage()),
-              MaterialPage(child: AppUsersPage()),
-            ]
-          : [
-              MaterialPage(child: LoginPage()),
-//        MaterialPage(
-//          key: ValueKey('BooksListPage'),
-//          child: BooksListScreen(
-//            books: books,
-//            onTapped: _handleBookTapped,
-//          ),
-//        ),
-//        if (show404)
-//          MaterialPage(key: ValueKey('UnknownPage'), child: UnknownScreen())
-//        else if (_selectedBook != null)
-//          BookDetailsPage(book: _selectedBook)
-            ],
-      onPopPage: (route, result) {
+      pages: _history,
+      onPopPage: (Route<dynamic> route, result) {
         if (!route.didPop(result)) {
           return false;
         }
 
-        // Update the list of pages by setting _selectedBook to null
-        //_selectedBook = null;
-        //show404 = false;
+        _history.removeLast();
         notifyListeners();
 
         return true;
@@ -52,29 +30,29 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
   }
 
   @override
-  Future<void> setNewRoutePath(AppRoutePath path) async {
-//    if (path.isUnknown) {
-//      _selectedBook = null;
-//      show404 = true;
-//      return;
-//    }
-//
-//    if (path.isDetailsPage) {
-//      if (path.id < 0 || path.id > books.length - 1) {
-//        show404 = true;
-//        return;
-//      }
-//
-//      _selectedBook = books[path.id];
-//    } else {
-//      _selectedBook = null;
-//    }
-//
-//    show404 = false;
-  }
+  Future<void> setNewRoutePath(AppRoute route) async {
+    if (route.isNotFound) {
+      _history.add(MaterialPage(child: NotFoundPage()));
+      return;
+    }
 
-//  void _handleBookTapped(Book book) {
-//    _selectedBook = book;
-//    notifyListeners();
-//  }
+    if (route.appModel.isAuthorized == false) {
+      _history.clear();
+      _history.add(MaterialPage(child: LoginPage()));
+      return;
+    }
+
+    if (route.appModel.isAuthorized) {
+      switch (route.path) {
+        case AppPath.NotFound:
+        case AppPath.Login:
+          return;
+
+        case AppPath.Root:
+        case AppPath.Users:
+          _history.add(MaterialPage(child: AppUsersPage()));
+          return;
+      }
+    }
+  }
 }
