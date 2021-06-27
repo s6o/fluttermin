@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermin/models/app_model.dart';
 
 /// Application path constants serialized as app's URL fragment.
 enum AppPath {
   NotFound,
   Root,
+  About,
   Login,
   Users,
 }
@@ -24,12 +24,12 @@ class AppRoute {
     '404': MapEntry(AppPath.NotFound, {}),
     '/': MapEntry(AppPath.Root, {}),
     'login': MapEntry(AppPath.Login, {}),
+    'about': MapEntry(AppPath.About, {}),
     'users': MapEntry(AppPath.Users, {})
   };
   String _path = '404';
-  AppModel _model;
 
-  AppRoute._internal(AppModel model, RouteInformation ri) : _model = model {
+  AppRoute._internal(RouteInformation ri) {
     if (ri.location != null) {
       try {
         Uri uri = Uri.parse(ri.location!);
@@ -62,13 +62,8 @@ class AppRoute {
     }
   }
 
-  factory AppRoute(AppModel model, RouteInformation ri) {
-    return AppRoute._internal(model, ri);
-  }
-
-  /// Access to app's data model
-  AppModel get appModel {
-    return _model;
+  factory AppRoute(RouteInformation ri) {
+    return AppRoute._internal(ri);
   }
 
   /// Serialize as [RouteInformation]'s location (URL path section).

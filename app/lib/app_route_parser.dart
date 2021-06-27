@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:fluttermin/app_route.dart';
-import 'package:fluttermin/models/app_model.dart';
 
 class AppRouteParser extends RouteInformationParser<AppRoute> {
-  final AppModel model;
-
-  AppRouteParser(this.model);
+  AppRouteParser();
 
   @override
   Future<AppRoute> parseRouteInformation(
       RouteInformation routeInformation) async {
-    print('Parse route info: $routeInformation');
-    return AppRoute(model, routeInformation);
+    print('Parse route info: ${routeInformation.location}');
+    return AppRoute(routeInformation);
   }
 
   @override
   RouteInformation restoreRouteInformation(AppRoute route) {
-    print('Restore route info: ${route.asRouteInformation}');
+    print('Restore route info: ${route.asRouteInformation.location}');
     return route.asRouteInformation;
   }
 }

@@ -19,15 +19,16 @@ class Fluttermin extends StatefulWidget {
 }
 
 class _FlutterminState extends State<Fluttermin> {
-  AppRouterDelegate _routerDelegate = AppRouterDelegate();
+  AppRouterDelegate? _routerDelegate;
   AppRouteParser? _routeParser;
 
   @override
   void initState() {
     super.initState();
-    _routeParser = AppRouteParser(
+    _routerDelegate = AppRouterDelegate(
       Provider.of<AppModel>(context, listen: false),
     );
+    _routeParser = AppRouteParser();
   }
 
   @override
@@ -37,7 +38,7 @@ class _FlutterminState extends State<Fluttermin> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      routerDelegate: _routerDelegate,
+      routerDelegate: _routerDelegate!,
       routeInformationParser: _routeParser!,
     );
   }
