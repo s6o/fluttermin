@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return APage(
       key: widget.key,
-      child: Center(
+      builder: (BuildContext ctx) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -65,16 +65,17 @@ class _LoginPageState extends State<LoginPage> {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
                               try {
-                                var ctrl = Scaffold.of(context).showBottomSheet(
-                                    (context) =>
-                                        Text('Sending credentials ...'));
+//                                var ctrl = Scaffold.of(context).showBottomSheet(
+//                                    (context) =>
+//                                        Text('Sending credentials ...'));
                                 Jwt jwt = await Api.login(model.credentials);
                                 Claims c = await Api.claims(jwt);
                                 model.user = User(jwt, c);
-                                ctrl.close();
+//                                ctrl.close();
                               } catch (e) {
-                                Scaffold.of(context).showBottomSheet(
-                                    (context) => Text((e as AppError).message));
+                                print((e as AppError).message);
+//                                Scaffold.of(context).showBottomSheet(
+//                                    (context) => Text((e as AppError).message));
                               }
                             }
                           },

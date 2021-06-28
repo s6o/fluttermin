@@ -8,7 +8,7 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return APage(
       key: key,
-      child: Container(
+      builder: (BuildContext ctx) => Container(
         child: Text('About'),
       ),
     );

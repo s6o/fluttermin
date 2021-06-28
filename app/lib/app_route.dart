@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-
-/// Application path constants serialized as app's URL fragment.
-enum AppPath {
-  NotFound,
-  Root,
-  About,
-  Login,
-  Users,
-}
+import 'package:fluttermin/models/app_model.dart';
+import 'package:fluttermin/models/app_path.dart';
 
 /// Translate from String route paths to AppRoutePath and vice versa.
 ///
@@ -19,24 +12,17 @@ enum AppPath {
 ///   * http://localhost:62639/#/login
 ///   * http://localhost:62639/#/users/id/1
 class AppRoute {
-  /// List of configured app's paths and respective initial states.
-  static final Map<String, MapEntry<AppPath, Map<String, String>>> _paths = {
-    '404': MapEntry(AppPath.NotFound, {}),
-    '/': MapEntry(AppPath.Root, {}),
-    'login': MapEntry(AppPath.Login, {}),
-    'about': MapEntry(AppPath.About, {}),
-    'users': MapEntry(AppPath.Users, {})
-  };
-  String _path = '404';
+  final AppModel model;
 
-  AppRoute._internal(RouteInformation ri) {
+  AppRoute._internal(this.model, RouteInformation ri) {
     if (ri.location != null) {
       try {
         Uri uri = Uri.parse(ri.location!);
         if (uri.pathSegments.isNotEmpty) {
-          if (_paths.containsKey(uri.pathSegments[0])) {
+          AppPath? ap = model.hasPath(uri.pathSegments[0]);
+          if (ap != null) {
             // parse url parameters into map
-            _path = uri.pathSegments[0];
+            model.appPath = ap;
             if (uri.pathSegments.length > 1) {
               String previousKey = '';
               Map<String, String> state =
@@ -50,11 +36,11 @@ class AppRoute {
                 }
                 return accum;
               });
-              _paths[_path] = MapEntry(_paths[_path]!.key, state);
+              model.appPathState = state;
             }
           }
         } else {
-          _path = '/';
+          model.appPath = AppPath.Root;
         }
       } catch (e) {
         print('Incorrect route information: $ri');
@@ -62,36 +48,12 @@ class AppRoute {
     }
   }
 
-  factory AppRoute(RouteInformation ri) {
-    return AppRoute._internal(ri);
+  factory AppRoute(AppModel model, RouteInformation ri) {
+    return AppRoute._internal(model, ri);
   }
 
   /// Serialize as [RouteInformation]'s location (URL path section).
   RouteInformation get asRouteInformation {
-    List<String> pairs =
-        _paths[_path]!.value.entries.map((e) => '${e.key}/${e.value}').toList();
-    return RouteInformation(
-        location: '$_path${pairs.isEmpty ? '' : '/' + pairs.join('/')}');
-  }
-
-  /// The current [AppPath].
-  AppPath get path {
-    return _paths[_path]!.key;
-  }
-
-  /// True when during initialization [RouteInformation] could not correctly
-  /// find a valid [AppRoute] to instanciate.
-  bool get isNotFound {
-    return _path == '404';
-  }
-
-  /// True if the root path was initialized
-  bool get isRoot {
-    return _path == '/';
-  }
-
-  /// State of current location.
-  Map<String, String> get state {
-    return _paths[_path]!.value;
+    return RouteInformation(location: model.appPathString);
   }
 }

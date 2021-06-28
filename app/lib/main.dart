@@ -28,7 +28,9 @@ class _FlutterminState extends State<Fluttermin> {
     _routerDelegate = AppRouterDelegate(
       Provider.of<AppModel>(context, listen: false),
     );
-    _routeParser = AppRouteParser();
+    _routeParser = AppRouteParser(
+      Provider.of<AppModel>(context, listen: false),
+    );
   }
 
   @override

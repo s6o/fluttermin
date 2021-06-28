@@ -6,9 +6,9 @@ import 'package:provider/provider.dart';
 /// every other page in the lib/pages/ directory.
 class APage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final Widget child;
+  final Widget Function(BuildContext) builder;
 
-  APage({required this.child, Key? key}) : super(key: key);
+  APage({required this.builder, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class APage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Fluttermin'),
       ),
-      body: child,
+      body: builder(context),
       drawer: Consumer<AppModel>(
         builder: (BuildContext ctx, AppModel model, Widget? w) {
           return Drawer(
@@ -30,7 +30,7 @@ class APage extends StatelessWidget {
                     color: Colors.blue,
                   ),
                 ),
-                if (model.isAuthorized) ..._authorizedItems(context, model),
+                if (AppModel.isAuthorized) ..._authorizedItems(context, model),
               ],
             ),
           );
