@@ -40,6 +40,15 @@ class Claims {
 
   bool get isExpired => expiration.compareTo(DateTime.now()) < 0;
 
+  Map<String, dynamic> toMap() {
+    return {
+      'user_id': id,
+      'email': email,
+      'app_role': role,
+      'exp': expiration.millisecondsSinceEpoch / 1000
+    };
+  }
+
   @override
   String toString() {
     return 'Claims: $id | $email | $role | expired = $isExpired';
