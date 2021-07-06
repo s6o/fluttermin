@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttermin/models/app_model.dart';
 import 'package:provider/provider.dart';
+import 'package:vrouter/vrouter.dart';
 
 /// Base page with [Scaffold], [AppBar] and [Drawer] and is meant as basis for
 /// every other page in the lib/pages/ directory.
@@ -30,7 +31,7 @@ class APage extends StatelessWidget {
                     color: Colors.blue,
                   ),
                 ),
-                if (AppModel.isAuthorized) ..._authorizedItems(context, model),
+                if (model.isAuthorized) ..._authorizedItems(context, model),
               ],
             ),
           );
@@ -42,12 +43,28 @@ class APage extends StatelessWidget {
   List<Widget> _authorizedItems(BuildContext context, AppModel model) {
     return <Widget>[
       ListTile(
-          title: Text('Logout'),
-          onTap: () {
-            model.unAuthorize();
-            _scaffoldKey.currentState?.openEndDrawer();
-          }),
+        title: Text('Logout'),
+        onTap: () {
+          model.unAuthorize();
+          VRouter.of(context).pushReplacement('/login');
+          _scaffoldKey.currentState?.openEndDrawer();
+        },
+      ),
       Divider(),
+      ListTile(
+        title: Text('About'),
+        onTap: () {
+          VRouter.of(context).pushReplacement('/about');
+          _scaffoldKey.currentState?.openEndDrawer();
+        },
+      ),
+      ListTile(
+        title: Text('Users'),
+        onTap: () {
+          VRouter.of(context).pushReplacement('/users');
+          _scaffoldKey.currentState?.openEndDrawer();
+        },
+      ),
     ];
   }
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermin/app_route_parser.dart';
-import 'package:fluttermin/app_router_delegate.dart';
+import 'package:fluttermin/pages/about_page.dart';
+import 'package:fluttermin/pages/app_users_page.dart';
+import 'package:fluttermin/pages/login_page.dart';
+import 'package:fluttermin/pages/not_found_page.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttermin/models/app_model.dart';
+import 'package:vrouter/vrouter.dart';
 
 void main() {
   runApp(
@@ -19,29 +22,25 @@ class Fluttermin extends StatefulWidget {
 }
 
 class _FlutterminState extends State<Fluttermin> {
-  AppRouterDelegate? _routerDelegate;
-  AppRouteParser? _routeParser;
-
-  @override
-  void initState() {
-    super.initState();
-    _routerDelegate = AppRouterDelegate(
-      Provider.of<AppModel>(context, listen: false),
-    );
-    _routeParser = AppRouteParser(
-      Provider.of<AppModel>(context, listen: false),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Fluttermin',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      routerDelegate: _routerDelegate!,
-      routeInformationParser: _routeParser!,
+    return Consumer<AppModel>(
+      builder: (BuildContext ctx, AppModel model, Widget? _) {
+        return VRouter(
+          initialUrl: model.isAuthorized ? '/about' : '/login',
+          title: 'Fluttermin',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          routes: [
+            VWidget(path: '/login', widget: LoginPage()),
+            VWidget(path: '/about', widget: AboutPage()),
+            VWidget(path: '/users', widget: AppUsersPage()),
+            VWidget(path: '/404', widget: NotFoundPage()),
+            VRouteRedirector(path: ':_(.+)', redirectTo: '/404')
+          ],
+        );
+      },
     );
   }
 }
