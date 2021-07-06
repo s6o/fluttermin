@@ -7,16 +7,16 @@ import 'package:vrouter/vrouter.dart';
 /// A page for authorized content, it wraps [APage] with [AppModel]'s isAuthorized
 /// check and in case of false re-directs to /login.
 class AuthorizedPage extends StatelessWidget {
-  final Widget Function(BuildContext) builder;
+  final Widget body;
 
-  const AuthorizedPage({required this.builder, Key? key}) : super(key: key);
+  const AuthorizedPage({required this.body, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (Provider.of<AppModel>(context, listen: false).isAuthorized) {
       return APage(
         key: key,
-        builder: builder,
+        body: body,
       );
     } else {
       VRouter.of(context).pushReplacement('/login');

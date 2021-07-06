@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       return APage(
         key: widget.key,
-        builder: (BuildContext ctx) => Center(
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

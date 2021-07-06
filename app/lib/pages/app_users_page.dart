@@ -8,7 +8,7 @@ class AppUsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return AuthorizedPage(
       key: key,
-      builder: (BuildContext ctx) => Container(
+      body: Container(
         child: Text('App users'),
       ),
     );

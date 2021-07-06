@@ -7,9 +7,9 @@ import 'package:vrouter/vrouter.dart';
 /// every other page in the lib/pages/ directory.
 class APage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final Widget Function(BuildContext) builder;
+  final Widget body;
 
-  APage({required this.builder, Key? key}) : super(key: key);
+  APage({required this.body, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class APage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Fluttermin'),
       ),
-      body: builder(context),
+      body: body,
       drawer: Consumer<AppModel>(
         builder: (BuildContext ctx, AppModel model, Widget? w) {
           return Drawer(
@@ -54,14 +54,14 @@ class APage extends StatelessWidget {
       ListTile(
         title: Text('About'),
         onTap: () {
-          VRouter.of(context).pushReplacement('/about');
+          VRouter.of(context).push('/about');
           _scaffoldKey.currentState?.openEndDrawer();
         },
       ),
       ListTile(
         title: Text('Users'),
         onTap: () {
-          VRouter.of(context).pushReplacement('/users');
+          VRouter.of(context).push('/users');
           _scaffoldKey.currentState?.openEndDrawer();
         },
       ),

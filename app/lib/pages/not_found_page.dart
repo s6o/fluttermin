@@ -8,7 +8,7 @@ class NotFoundPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return APage(
       key: key,
-      builder: (BuildContext ctx) => Container(
+      body: Container(
         child: Text('Not Found'),
       ),
     );
