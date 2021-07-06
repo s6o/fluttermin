@@ -15,6 +15,9 @@ class AppUsersPage extends StatelessWidget {
       title: Text('Users'),
       body: Consumer<AppModel>(
         builder: (BuildContext context, AppModel model, Widget? _) {
+          if (model.user == null) {
+            return Container();
+          }
           return FutureBuilder(
             future: Api.users(model.user!.jwt),
             builder: (BuildContext context, AsyncSnapshot snapshot) {

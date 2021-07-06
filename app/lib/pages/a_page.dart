@@ -26,7 +26,10 @@ class APage extends StatelessWidget {
               padding: EdgeInsets.zero,
               children: [
                 DrawerHeader(
-                  child: Text('Fluttermin'),
+                  child: Text(
+                    'Fluttermin',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.blue,
                   ),

@@ -20,6 +20,7 @@ environment:
 
 dependencies:
   http: ^0.13.3
+  package_info_plus: ^1.0.3
   provider: ^5.0.0
   shared_preferences: ^2.0.6
   vrouter: ^1.1.4+17
