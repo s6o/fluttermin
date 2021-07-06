@@ -1,12 +1,11 @@
-class AppError {
-  final String message;
+import 'package:http/http.dart' as http;
 
-  AppError(this.message) {
-    assert(this.message.trim().length > 0);
-  }
-  AppError.empty() : message = '';
+class AppError<T> {
+  final T? data;
 
-  bool get isEmpty {
-    return message.isEmpty;
-  }
+  AppError(this.data);
+
+  bool get isException => (data is Exception);
+
+  bool get isHttpResponse => (data is http.Response);
 }

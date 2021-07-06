@@ -77,7 +77,6 @@ class _LoginPageState extends State<LoginPage> {
                                   VRouter.of(context)
                                       .pushReplacement(model.defaultPath);
                                 } catch (e) {
-                                  print(e.toString());
                                   setState(() {
                                     _statusMessage = 'Failed to sign in.';
                                   });

@@ -22,9 +22,9 @@ class Api {
       );
       return r.statusCode == 200
           ? Future.value(Jwt.fromJson(r.body))
-          : Future.error(AppError(r.body));
+          : Future.error(AppError(r));
     } catch (e) {
-      return Future.error(AppError(e.toString()));
+      return Future.error(AppError(e));
     }
   }
 
@@ -65,16 +65,13 @@ class Api {
             m.containsKey('payload')) {
           return Future.value(Claims.fromMap(m['payload']));
         } else {
-          return Future.error(AppError('Returned claims were not valid.'));
+          return Future.error(AppError(m));
         }
       } else {
-        return Future.error(
-          AppError(
-              'Unexpected claims request resposne | ${r.statusCode} | ${r.body}'),
-        );
+        return Future.error(AppError(r));
       }
     } catch (e) {
-      return Future.error(AppError(e.toString()));
+      return Future.error(AppError(e));
     }
   }
 }
