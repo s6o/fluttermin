@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fluttermin/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttermin/models/auth.dart';
 import 'package:fluttermin/models/app_error.dart';
@@ -67,6 +68,26 @@ class Api {
         } else {
           return Future.error(AppError(m));
         }
+      } else {
+        return Future.error(AppError(r));
+      }
+    } catch (e) {
+      return Future.error(AppError(e));
+    }
+  }
+
+  static Future<List<User>> users(Jwt jwt) async {
+    try {
+      http.Response r = await http.get(
+        _baseUrl.replace(path: 'fluttermin_users'),
+        headers: {
+          'Authorization': 'Bearer ${jwt.token}',
+          'Content-Type': 'application/json',
+        },
+      );
+      if (r.statusCode == 200) {
+        List<dynamic> data = jsonDecode(r.body);
+        return data.map((m) => User.fromMap(m)).toList();
       } else {
         return Future.error(AppError(r));
       }

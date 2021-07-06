@@ -8,16 +8,16 @@ import 'package:vrouter/vrouter.dart';
 class APage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final Widget body;
+  final Widget title;
 
-  APage({required this.body, Key? key}) : super(key: key);
+  APage({required this.body, this.title = const Text('Fluttermin'), Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text('Fluttermin'),
-      ),
+      appBar: AppBar(title: title),
       body: body,
       drawer: Consumer<AppModel>(
         builder: (BuildContext ctx, AppModel model, Widget? w) {

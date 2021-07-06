@@ -8,8 +8,11 @@ import 'package:vrouter/vrouter.dart';
 /// check and in case of false re-directs to /login.
 class AuthorizedPage extends StatelessWidget {
   final Widget body;
+  final Widget title;
 
-  const AuthorizedPage({required this.body, Key? key}) : super(key: key);
+  const AuthorizedPage(
+      {required this.body, this.title = const Text('Fluttermin'), Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +20,7 @@ class AuthorizedPage extends StatelessWidget {
       return APage(
         key: key,
         body: body,
+        title: title,
       );
     } else {
       VRouter.of(context).pushReplacement('/login');

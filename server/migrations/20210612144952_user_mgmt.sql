@@ -7,7 +7,7 @@ ALTER DEFAULT PRIVILEGES REVOKE EXECUTE ON FUNCTIONS FROM public;
 CREATE OR REPLACE VIEW fluttermin_users
   (user_id, last_name, first_name, email)
 AS
-  SELECT user_id, last_name, first_name, email
+  SELECT user_id, last_name, first_name, email, app_role
   FROM fluttermin.users
   ORDER BY last_name
 ;
