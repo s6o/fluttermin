@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluttermin/models/auth.dart';
-import 'package:fluttermin/models/user.dart';
+import 'package:fluttermin/models/app_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Main application model that composes various submodels.
 class AppModel extends ChangeNotifier {
   Credentials _credentials;
-  User? _user;
+  AppUser? _user;
 
   AppModel() : _credentials = Credentials() {
     _deserializeUser();
@@ -21,11 +21,11 @@ class AppModel extends ChangeNotifier {
 
   bool get isAuthorized => _user != null && _user!.isAuthorized;
 
-  User? get user {
+  AppUser? get user {
     return _user;
   }
 
-  set user(User? u) {
+  set user(AppUser? u) {
     _user = u;
     _credentials = Credentials();
     _serializeUser();
@@ -41,7 +41,7 @@ class AppModel extends ChangeNotifier {
       var sp = await SharedPreferences.getInstance();
       var json = sp.getString('user');
       if (json != null) {
-        _user = await User.fromJson(json);
+        _user = await AppUser.fromJson(json);
       }
     } catch (e) {
       print(e);

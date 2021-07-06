@@ -36,7 +36,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZmx1dHRlc
 
 ### List Fluttermin (app) users
 GET http://localhost:3000/fluttermin_users HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZmx1dHRlcm1pbl91c2VyIiwiYXBwX3JvbGUiOiJhZG1pbiIsImVtYWlsIjoiam9obi5kb2VAbG9zdC5uZXQiLCJ1c2VyX2lkIjoxLCJleHAiOjE2MjM1Nzg0MjF9.nludiFiIlzjfVsSoGGL2k8vVaDx-iUZMyAw-3WalIR4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZmx1dHRlcm1pbl91c2VyIiwiYXBwX3JvbGUiOiJhZG1pbiIsImVtYWlsIjoiam9obi5kb2VAbG9zdC5uZXQiLCJ1c2VyX2lkIjoxLCJleHAiOjE2MjU1NzY0NDZ9.aB4Qp4kDJ40tZECr_FpYJD5O0ZmE8DQv1iyc9XNE_1o
 
 ### Check JWT claims
 POST http://localhost:3000/rpc/fluttermin_claims HTTP/1.1

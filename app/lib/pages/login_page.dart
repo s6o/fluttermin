@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttermin/models/user.dart';
+import 'package:fluttermin/models/app_user.dart';
 import 'package:fluttermin/pages/a_page.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttermin/api.dart';
@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                                 try {
                                   Jwt jwt = await Api.login(model.credentials);
                                   Claims c = await Api.claims(jwt);
-                                  model.user = User(jwt, c);
+                                  model.user = AppUser(jwt, c);
                                   VRouter.of(context)
                                       .pushReplacement(model.defaultPath);
                                 } catch (e) {
